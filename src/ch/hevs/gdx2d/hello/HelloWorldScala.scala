@@ -3,6 +3,8 @@ package ch.hevs.gdx2d.hello
 import ch.hevs.gdx2d.lib.GdxGraphics
 import com.badlogic.gdx.{Gdx, Input, InputProcessor}
 import ch.hevs.gdx2d.desktop.PortableApplication
+import com.badlogic.gdx.utils.Timer
+import com.badlogic.gdx.utils.Timer.Task
 
 object HelloWorldScala {
   def main(args: Array[String]): Unit = {
@@ -59,35 +61,69 @@ class HelloWorldScala extends PortableApplication {
     ball = new Ball(Gdx.graphics.getWidth / 2, Gdx.graphics.getHeight / 2, 10, 10)
   }
 
+  var upPressed = false
+  var downPressed = false
+  val sendInterval = 0.1f // Intervalle en secondes pour envoyer les commandes
+
   def startGame(): Unit = {
     inMenu = false
+
     Gdx.input.setInputProcessor(new InputProcessor {
       override def keyDown(keycode: Int): Boolean = {
         keycode match {
           case Input.Keys.UP =>
-            if (pb) p.client.send(s"${p.playerID},UP")
+            if (pb) {
+              upPressed = true
+              startSendingCommands("UP")
+            }
             true
           case Input.Keys.DOWN =>
-            if (pb) p.client.send(s"${p.playerID},DOWN")
+            if (pb) {
+              downPressed = true
+              startSendingCommands("DOWN")
+            }
             true
           case _ => false
         }
       }
 
-      override def keyUp(i: Int): Boolean = true
+      override def keyUp(keycode: Int): Boolean = {
+        keycode match {
+          case Input.Keys.UP =>
+            upPressed = false
+            stopSendingCommands()
+            true
+          case Input.Keys.DOWN =>
+            downPressed = false
+            stopSendingCommands()
+            true
+          case _ => false
+        }
+      }
 
       override def keyTyped(c: Char): Boolean = false
-
       override def touchDown(i: Int, i1: Int, i2: Int, i3: Int): Boolean = false
-
       override def touchUp(i: Int, i1: Int, i2: Int, i3: Int): Boolean = false
-
       override def touchDragged(i: Int, i1: Int, i2: Int): Boolean = false
-
       override def mouseMoved(i: Int, i1: Int): Boolean = false
-
       override def scrolled(i: Int): Boolean = false
     })
+  }
+
+  def startSendingCommands(direction: String): Unit = {
+    Timer.schedule(new Task {
+      override def run(): Unit = {
+        if (upPressed && direction == "UP") {
+          p.client.send(s"${p.playerID},UP")
+        } else if (downPressed && direction == "DOWN") {
+          p.client.send(s"${p.playerID},DOWN")
+        }
+      }
+    }, 0, sendInterval)
+  }
+
+  def stopSendingCommands(): Unit = {
+    Timer.instance().clear()
   }
 
   def exitGame(): Unit = {

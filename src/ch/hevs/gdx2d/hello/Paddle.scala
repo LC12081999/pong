@@ -11,9 +11,9 @@ class Paddle(xI: Int, yI: Int, w: Int, h: Int) extends Obj(xI, yI, w, h) {
   def update(playerID: String, a: Array[String]): Unit = {
     if (a(0) == playerID) {
       if (a(1) == "UP") {
-        y -= speed
-      } else if (a(1) == "DOWN") {
         y += speed
+      } else if (a(1) == "DOWN") {
+        y -= speed
       }
       y = Math.max(0, Math.min(y, 480 - height))
     }
