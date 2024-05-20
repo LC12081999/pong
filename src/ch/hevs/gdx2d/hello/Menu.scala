@@ -31,8 +31,9 @@ class Menu(val startGame: () => Unit, val hw: HelloWorldScala) {
         hw.server = new SimpleSocketServer(9999)
         hw.server.start()
         hw.p = new Player(new SimpleSocketClient("localhost", 9999), "1")
+        hw.p.client.start()
         hw.pb = true
-        startGame()
+        //startGame()
       }
     })
 
@@ -44,8 +45,9 @@ class Menu(val startGame: () => Unit, val hw: HelloWorldScala) {
         if (key == '\r' || key == '\n') {
           hw.p = new Player(new SimpleSocketClient(ipFieldP2.getText, 9999), "2")
           hw.pb = true
+          hw.p.client.start()
           hw.p.client.send("start")
-          //startGame()
+          startGame()
         }
       }
     })
