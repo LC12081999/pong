@@ -48,6 +48,7 @@ class HelloWorldScala extends PortableApplication {
       val commands = p.client.toGet.split(",")
       leftPaddle.update("1", commands)
       rightPaddle.update("2", commands)
+      p.client.getCheck = false
     }
     ball.update(leftPaddle, rightPaddle)
   }

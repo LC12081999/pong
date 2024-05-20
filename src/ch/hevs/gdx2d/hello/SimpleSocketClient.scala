@@ -25,7 +25,6 @@ class SimpleSocketClient(host: String, port: Int) {
             getCheck = true
           }
           println(s"Server: $response")
-          getCheck = false
         }
       } catch {
         case e: Exception => println(s"Error: ${e.getMessage}")
