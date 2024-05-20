@@ -30,8 +30,8 @@ class Menu(val startGame: () => Unit, val hw: HelloWorldScala) {
         super.clicked(event, x, y)
         hw.server = new SimpleSocketServer(9999)
         hw.server.start()
-        hw.p1 = new Player(new SimpleSocketClient("localhost", 9999), "1")
-        hw.p1b = true
+        hw.p = new Player(new SimpleSocketClient("localhost", 9999), "1")
+        hw.pb = true
         //startGame()
       }
     })
@@ -42,9 +42,9 @@ class Menu(val startGame: () => Unit, val hw: HelloWorldScala) {
     ipFieldP2.setTextFieldListener(new TextFieldListener {
       override def keyTyped(textField: TextField, key: Char): Unit = {
         if (key == '\r' || key == '\n') {
-          hw.p2 = new Player(new SimpleSocketClient(ipFieldP2.getText, 9999), "2")
-          hw.p2b = true
-          hw.p2.client.send("start")
+          hw.p = new Player(new SimpleSocketClient(ipFieldP2.getText, 9999), "2")
+          hw.pb = true
+          hw.p.client.send("start")
           //startGame()
         }
       }

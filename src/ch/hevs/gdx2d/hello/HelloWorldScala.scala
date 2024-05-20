@@ -14,10 +14,8 @@ class HelloWorldScala extends PortableApplication {
   var leftPaddle: Paddle = _
   var rightPaddle: Paddle = _
   var ball: Ball = _
-  var p1: Player = _
-  var p2: Player = _
-  var p1b: Boolean = false
-  var p2b: Boolean = false
+  var p: Player = _
+  var pb: Boolean = false
   var server: SimpleSocketServer = _
   var menu: Menu = _
   var inMenu: Boolean = true
@@ -34,17 +32,9 @@ class HelloWorldScala extends PortableApplication {
     if (inMenu) {
       menu.draw()
       try {
-        if (p1.client.getCheck) {
+        if (p.client.getCheck) {
           println("piouuuu")
-          if (p1.client.toGet == "start") inMenu = false
-        }
-      } catch {
-        case e: NullPointerException =>
-      }
-      try {
-        if (p2.client.getCheck) {
-          println("popo")
-          if (p2.client.toGet == "start") inMenu = false
+          if (p.client.toGet == "start") inMenu = false
         }
       } catch {
         case e: NullPointerException =>
@@ -59,15 +49,10 @@ class HelloWorldScala extends PortableApplication {
   }
 
   def updateGame(): Unit = {
-    if (p1b && p1.client.getCheck) {
-      val commands = p1.client.toGet.split(",")
+    if (pb && p.client.getCheck) {
+      val commands = p.client.toGet.split(",")
       leftPaddle.update("1", commands)
       rightPaddle.update("2", commands)
-    }
-    if (p2b && p2.client.getCheck) {
-      val commands = p2.client.toGet.split(",")
-      rightPaddle.update("2", commands)
-      leftPaddle.update("1", commands)
     }
     ball.update(leftPaddle, rightPaddle)
   }
@@ -84,12 +69,10 @@ class HelloWorldScala extends PortableApplication {
       override def keyDown(keycode: Int): Boolean = {
         keycode match {
           case Input.Keys.UP =>
-            if (p1b) p1.client.send("1,UP")
-            else if (p2b) p2.client.send("2,UP")
+            if (pb) p.client.send(s"${p.playerID},UP")
             true
           case Input.Keys.DOWN =>
-            if (p1b) p1.client.send("1,DOWN")
-            else if (p2b) p2.client.send("2,DOWN")
+            if (pb) p.client.send(s"${p.playerID},DOWN")
             true
           case _ => false
         }
