@@ -32,7 +32,7 @@ class Menu(val startGame: () => Unit, val hw: HelloWorldScala) {
         hw.server.start()
         hw.p = new Player(new SimpleSocketClient("localhost", 9999), "1")
         hw.pb = true
-        //startGame()
+        startGame()
       }
     })
 

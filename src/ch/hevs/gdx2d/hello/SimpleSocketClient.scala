@@ -14,13 +14,16 @@ class SimpleSocketClient(host: String, port: Int) {
   private val out = new PrintStream(socket.getOutputStream)
   var toGet: String = ""
   var getCheck: Boolean = false
+
   def start(): Unit = {
     Future {
       try {
         while (running && in.hasNext) {
-          getCheck = true
           val response = in.next()
-          toGet = response
+          synchronized {
+            toGet = response
+            getCheck = true
+          }
           println(s"Server: $response")
           getCheck = false
         }
@@ -43,5 +46,3 @@ class SimpleSocketClient(host: String, port: Int) {
     socket.close()
   }
 }
-
-

@@ -31,13 +31,8 @@ class HelloWorldScala extends PortableApplication {
     g.clear()
     if (inMenu) {
       menu.draw()
-      try {
-        if (p.client.getCheck) {
-          println("piouuuu")
-          if (p.client.toGet == "start") inMenu = false
-        }
-      } catch {
-        case e: NullPointerException =>
+      if (p != null) {
+        if (p.client.toGet == "start") startGame()
       }
     } else {
       leftPaddle.draw(g)
