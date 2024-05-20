@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="co.pragmati.swagger.ui.akka.http_2.12" type="repository">
+    <properties maven-id="co.pragmati:swagger-ui-akka-http_2.12:1.2.1">
+      <exclude>
+        <dependency maven-id="co.pragmati:swagger-ui-akka-http_2.12" />
+        <dependency maven-id="org.scala-lang:scala-library" />
+      </exclude>
+    </properties>
+    <CLASSES />
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
